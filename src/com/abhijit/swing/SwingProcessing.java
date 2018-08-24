@@ -5,36 +5,111 @@ import java.util.ArrayList;
 public class SwingProcessing implements SwingOperationsInterface {
 
 	@Override
-	public void searchContinuityAboveValue(ArrayList<Integer> data, int indexBegin, int indexEnd, float threshold,
+	public int searchContinuityAboveValue(ArrayList<Float> data, int indexBegin, int indexEnd, float threshold,
 			int winLength) {
-		// TODO Auto-generated method stub
-
+		int count=1;
+		int start =-1;
+		int prevIndex=-999;
+		for(int i=indexBegin;i<=indexEnd;i++) {
+			if(data.get(i)>threshold) {
+				if(prevIndex == (i-1)) {
+					count++;
+				}else {
+					start = i;
+					count=1;
+				}				
+				prevIndex=i;
+				if(count>=winLength) return start;
+			}
+		}
+		return -1;
 	}
 
 	@Override
-	public void backSearchContinuityWithinRange(ArrayList<Integer> data, int indexBegin, int indexEnd,
+	public int backSearchContinuityWithinRange(ArrayList<Float> data, int indexBegin, int indexEnd,
 			float thresholdLo, float thresholdHi, int winLength) {
-		// TODO Auto-generated method stub
-
+		int count=1;
+		int start =-1;
+		int prevIndex=-999;
+		for(int i=indexBegin;i>=indexEnd;i--) {
+			if(data.get(i)>thresholdLo && data.get(i)<thresholdHi) {
+				if(prevIndex == (i-1)) {
+					count++;
+				}else {
+					start = i;
+					count=1;
+				}				
+				prevIndex=i;
+				if(count>=winLength) return start;
+			}
+		}
+		return -1;
 	}
 
 	@Override
-	public void searchContinuityAboveValueTwoSignals(ArrayList<Integer> data1, ArrayList<Integer> data2, int indexBegin,
+	public ArrayList<Integer> searchContinuityAboveValueTwoSignals(ArrayList<Float> data1, ArrayList<Float> data2, int indexBegin,
 			int indexEnd, float threshold1, float threshold2, int winLength) {
-		// TODO Auto-generated method stub
+		
+		ArrayList<Integer> list =new ArrayList<Integer>();
+		list = helper(data1,indexBegin,indexEnd,threshold1,winLength,list);
+		list = helper(data2,indexBegin,indexEnd,threshold2,winLength,list);
+			
+		return list;
+	}
 
+	private ArrayList<Integer> helper(ArrayList<Float> data, int indexBegin, int indexEnd, float threshold,
+			int winLength, ArrayList<Integer> list) {
+		
+		int count=1;
+		int start =-1;
+		int prevIndex=-999;
+		for(int i=indexBegin;i<=indexEnd;i++) {
+			if(data.get(i)>threshold) {
+				if(prevIndex == (i-1)) {
+					count++;
+				}else {
+					start = i;
+					count=1;
+				}				
+				prevIndex=i;
+				if(count>=winLength) {
+					list.add(start);
+					return list;
+				}
+			}
+		}
+		return list;
 	}
 
 	@Override
-	public void searchMultiContinuityWithinRange(ArrayList<Integer> data, int indexBegin, int indexEnd,
+	public ArrayList<Integer> searchMultiContinuityWithinRange(ArrayList<Float> data, int indexBegin, int indexEnd,
 			float thresholdLo, float thresholdHi, int winLength) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		
+		int count=1;
+		int start =-1;
+		int prevCount=-1;
+		ArrayList<Integer> list =new ArrayList<Integer>();
+		ArrayList<Integer> result =new ArrayList<Integer>();
+		for(int i=indexBegin;i>=indexEnd;i--) {
+			if(data.get(i)>thresholdLo && data.get(i)<thresholdHi) {
+				list.add(i);
+			}
+		}
+		for(int i=1;i<list.size();i++) {
+			if(list.get(i)==(list.get(i-1)+1)) {
+				count++;
+			}else {
+				start =i;
+				prevCount=count;
+				count=1;
+				if(prevCount>=winLength) {
+					result.add(start);
+					result.add(i-1);
+					return result;
+				}
+			}			
+		}
+		return result;
 	}
 
 }
