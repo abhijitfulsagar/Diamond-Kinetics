@@ -8,7 +8,7 @@ public class SwingProcessing implements SwingOperationsInterface {
 	public int searchContinuityAboveValue(ArrayList<Float> data, int indexBegin, int indexEnd, float threshold,
 			int winLength) {
 		int count=1;
-		int start =-1;
+		int start =indexBegin;
 		int prevIndex=-999;
 		for(int i=indexBegin;i<=indexEnd;i++) {
 			if(data.get(i)>threshold) {
@@ -29,7 +29,7 @@ public class SwingProcessing implements SwingOperationsInterface {
 	public int backSearchContinuityWithinRange(ArrayList<Float> data, int indexBegin, int indexEnd,
 			float thresholdLo, float thresholdHi, int winLength) {
 		int count=1;
-		int start =-1;
+		int start =indexBegin;
 		int prevIndex=-999;
 		for(int i=indexBegin;i>=indexEnd;i--) {
 			if(data.get(i)>thresholdLo && data.get(i)<thresholdHi) {
@@ -61,7 +61,7 @@ public class SwingProcessing implements SwingOperationsInterface {
 			int winLength, ArrayList<Integer> list) {
 		
 		int count=1;
-		int start =-1;
+		int start =indexBegin;
 		int prevIndex=-999;
 		for(int i=indexBegin;i<=indexEnd;i++) {
 			if(data.get(i)>threshold) {
@@ -86,11 +86,11 @@ public class SwingProcessing implements SwingOperationsInterface {
 			float thresholdLo, float thresholdHi, int winLength) {
 		
 		int count=1;
-		int start =-1;
+		int start =indexBegin;
 		int prevCount=-1;
 		ArrayList<Integer> list =new ArrayList<Integer>();
 		ArrayList<Integer> result =new ArrayList<Integer>();
-		for(int i=indexBegin;i>=indexEnd;i--) {
+		for(int i=indexBegin;i<=indexEnd;i++) {
 			if(data.get(i)>thresholdLo && data.get(i)<thresholdHi) {
 				list.add(i);
 			}
@@ -99,17 +99,16 @@ public class SwingProcessing implements SwingOperationsInterface {
 			if(list.get(i)==(list.get(i-1)+1)) {
 				count++;
 			}else {
-				start =i;
 				prevCount=count;
-				count=1;
 				if(prevCount>=winLength) {
 					result.add(start);
 					result.add(i-1);
 					return result;
 				}
+				start =i;				
+				count=1;				
 			}			
 		}
 		return result;
 	}
-
 }

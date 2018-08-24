@@ -1,0 +1,6 @@
+1. This coding challenge is done in Java.
+2. I have used ArrayList(ie. The data comming as parameter to the functions is of type arraylsit). 
+3. The searchContinuityAboveValueTwoSignals() will return an arraylist with two elements. The first index where both data1 and data2 
+have values that meet these criteria for at least winLength samples 
+4. The searchMultiContinuityWithinRange() returns an arraylist with two elements the starting index and ending index of all continuous 
+samples that meet this criteria for at least winLength data points
